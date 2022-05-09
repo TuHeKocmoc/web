@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+<table width="100%" class="table table-bordered"
+       style="color: white; font-size: 14pt; background-color: #483D8B;">
+
+    <tr style="font-size: 18pt; font-weight:bold;">
+        <td>ID</td>
+        <td>Фамилия и имя</td>
+        <td>Email</td>
+        <td>Посты</td>
+        <td>Кол-во лайков</td>
+    </tr>
+    {% for user in users %}
+    <tr>
+        <td>{{ user.id }}</td>
+        <td><img alt="Профиль пользователя" width="50px" height="50px"
+                                 src="{{url_for('static', filename='img/users/') + user.icon}}"
+                                 style="border-radius: 50%;
+                            margin-right: 20px;">
+<a href="/users/{{ user.id }}"
+   style="color: white;">{{ user.surname }} {{ user.name }}</a></td>
+        <td>{{ user.email }}</td>
+        <td><a href="/posts/users/{{ user.id }}" style="color: white;">Посмотреть его посты ({{
+           user.posts | length }})</a></td>
+        <td>{{ user.kol_likes }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

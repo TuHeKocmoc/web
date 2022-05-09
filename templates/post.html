@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h4 style="text-align: center; margin-bottom: 10px;" class="text-muted">
+    Пост</h4>
+<h1 style="text-align: center; margin-bottom: 20px">{{ post.title }}</h1>
+<div style="background-color: white; border-radius: 20px; padding: 10px 10px;">
+    <pre style="font-size: 16pt;">{{ post.content }}</pre>
+</div>
+<div style="margin: 20px 0px;">
+    <h4>Автор: {{ post.author.name }} {{ post.author.surname }}</h4>
+    <h4>Дата публикации: {{ post.created_date.strftime('%e %b, %Y') }}</h4>
+</div>
+<div style="margin: 50px 0px;">
+    {% if not like %}
+    <a class="btn btn-primary" href="/posts/{{ post.id }}/like">
+        Поставить лайк</a>
+    {% elif not is_cur_user %}
+    <a class="btn btn-danger" href="/posts/{{ post.id }}/dislike">
+        Убрать лайк</a>
+    {% endif %}
+    <p>Кол-во лайков: <b>{{ post.likes_ | length }}</b></p>
+</div>
+<h2>Комментарии: {{post.comments | length}}</h2>
+<form action="" method="post" class="form-inline pb-2">
+    {{ form.hidden_tag() }}
+
+    <p>
+        {{ form.content(class="form-control", style="width: 400px;") }}
+        {% for error in form.content.errors %}
+    <p class="alert alert-danger" role="alert">
+        {{ error }}
+    </p>
+    {% endfor %}
+    </p>
+    <p>{{ form.submit_main(type="submit", class="btn btn-primary m-2") }}</p>
+</form>
+
+<!--{% for c in comments %}
+     <div class="media-block">
+        <a class="media-left" href="#"><img class="img-circle img-sm" alt="Профиль пользователя" src=""></a>
+        <div class="media-body">
+            <div class="mar-btm">
+                <a href="#" class="btn-link text-semibold media-heading box-inline">{{ c.user.name
+                    }} {{ c.user.surname }}</a>
+                <p class="text-muted text-sm"><i class="fa fa-mobile fa-lg"></i>{{
+                    c.created_date.strftime('%e %b %Y') }}</p>
+            </div>
+            <p>{{ c.text }}</p>
+            <div class="pad-ver">
+                <div class="btn-group">
+                    <a class="btn btn-sm btn-default btn-hover-success active" href="#"><i class="fa fa-thumbs-up"></i> Нравится</a>
+                    <a class="btn btn-sm btn-default btn-hover-danger" href="#"><i class="fa fa-thumbs-down"></i></a>
+                </div>
+                <a class="btn btn-sm btn-default btn-hover-primary"
+                   href="{{ url_for('show_post', post_id=c.post_id, reply_to=c.id) }}">
+                    Ответить</a>
+            </div>
+            <hr>
+        </div>
+     </div>
+{% if reply_id == c.id | string %}
+   <form action="" method="post" class="form-inline pb-2">
+        {{ form.hidden_tag() }}
+
+        <p>
+            {{ form.content.label }}<br>
+            {{ form.content(class="form-control") }}
+            {% for error in form.content.errors %}
+                <p class="alert alert-danger" role="alert">
+                    {{ error }}
+                </p>
+            {% endfor %}
+        </p>
+        <p>{{ form.submit(type="submit", class="btn btn-primary m-2") }}</p>
+</form>
+{% endif %}
+{% endfor %}-->
+<section class="container">
+    <div class="row">
+
+        <div class="col-md-12">
+
+            <div class="panel">
+                <div class="panel-body">
+                    <!-- Содержание Новостей -->
+                    <!--===================================================-->
+                    {{ html_code | safe}}
+                    <!--===================================================-->
+                    <!-- Конец Содержания Новостей -->
+                </div>
+            </div>
+        </div>
+
+    </div><!-- /.row -->
+</section><!-- /.container -->
+
+{% endblock %}

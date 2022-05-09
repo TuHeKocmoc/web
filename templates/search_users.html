@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="font-size: 14pt;">
+<form action="" method="post" class="form-inline pb-2">
+    <input name="for_search" class="form-control m-2" value="{{ last_query }}">
+
+    <select name="kind" class="form-select m-2" autofocus>
+        <option value="users" selected>Пользователи</option>
+        <option value="posts">Посты</option>
+        <option value="videos">Видео</option>
+    </select>
+
+    <input class="btn btn-primary m-2" id="submit" name="submit" type="submit"
+           value="Поиск">
+</form>
+{% if users %}
+<table width="100%" class="table table-bordered" style="color: white; font-size: 14pt;">
+
+    <tr class="bg-primary" style="font-size: 18pt; font-weight:bold;">
+        <td>ID</td>
+        <td>Фамилия и имя</td>
+        <td>Email</td>
+        <td>Посты</td>
+    </tr>
+    {% for user in users %}
+    <tr class="bg-primary">
+        <td>{{ user.id }}</td>
+                <td><img alt="Профиль пользователя" width="50px" height="50px"
+                                 src="{{url_for('static', filename='img/users/') + user.icon}}"
+                                 style="border-radius: 50%;
+                            margin-right: 20px;">
+<a href="/users/{{ user.id }}"
+   style="color: white;">{{ user.surname }} {{ user.name }}</a></td>
+        <td>{{ user.email }}</td>
+        <td><a href="/posts/users/{{ user.id }}" style="color: white;">Посмотреть его посты ({{
+
+           user.posts | length }})</a></td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% else %}
+<p class="text-danger text-center">Ничего не найдено!</p>
+{% endif %}
+<nav aria-label="Page navigation example" style="font-size: 18pt;">
+    <ul class="pagination">
+        <li class="page-item"><a class="page-link"
+                                 href="{{ prev_url }}">Previous</a>
+        </li>
+        {% for p in pages %}
+        <li class="page-item {% if p == page %} active-page-item {% endif %}"><a class="page-link"
+                                 href="{{ url_for('search',
+                                 query=last_query, kind=kind, page=p) }}">{{ p }}</a></li>
+        {% endfor %}
+        <li class="page-item"><a class="page-link"
+                                 href="{{ next_url }}">Next</a></li>
+    </ul>
+</nav>
+</div>
+
+
+{% endblock %}
